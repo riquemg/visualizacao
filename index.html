@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Trabalho Final - Visualização de Dados</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="scatterplot.js"></script>
+</head>
+<body>
+
+<div class="container-fluid p-5 bg-primary text-white text-center">
+  <h1>Trabalho Final - Visualização de Dados</h1>
+  <p>Henrique Gomes Nunes - henrique.mg.bh@gmail.com</p> 
+</div>
+  
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-sm-4">
+      
+      <h3>Filters:</h3>
+
+      <div class="col-sm-6">
+        <p>Axis x:</p>
+        <select id="axisX" name="axisX" class="form-select" multiple aria-label="multiple select example" onclick="graphic();">
+          <option value="dit">dit</option>
+          <option value="fanin">fanin</option>
+          <option value="fanout">fanout</option>
+          <option value="lcc">lcc</option>
+          <option value="lcom*">lcom*</option>
+          <option value="loc">loc</option>
+          <option value="noc">noc</option>
+          <option value="rfc">rfc</option>
+          <option value="icq">icq</option>
+          <option value="nof">nof</option>
+          <option value="nom">nom</option>
+          <option value="wmc">wmc</option>
+        </select>
+      </div>
+
+      <br>
+
+      <p>Axis y:</p>
+      <div class="col-sm-6">
+        <select id="axisY" name="axisY" class="form-select" multiple aria-label="multiple select example" onclick="graphic();">
+          <option value="dit">dit</option>
+          <option value="fanin">fanin</option>
+          <option value="fanout">fanout</option>
+          <option value="lcc">lcc</option>
+          <option value="lcom*">lcom*</option>
+          <option value="loc">loc</option>
+          <option value="noc">noc</option>
+          <option value="rfc">rfc</option>
+          <option value="icq">icq</option>
+          <option value="nof">nof</option>
+          <option value="nom">nom</option>
+          <option value="wmc">wmc</option>
+        </select>
+      </div>
+
+      <br>
+
+      <p>Code smell:</p>
+      <div class="col-sm-6">
+        <select id="smell" name="smell" class="form-select" multiple aria-label="multiple select example" onclick="graphic();">
+          <option value="gc">God Class</option>
+          <option value="rb">Refused Bequest</option>
+        </select>
+      </div>
+
+    </div>
+    <div class="col-sm-8">
+      <h3>Metrics distribution:</h3>
+      <svg id="scatterChart"></svg>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+
+  function graphic(){
+
+    x = document.getElementById("axisX").value;
+    y = document.getElementById("axisY").value;
+    smell = document.getElementById("smell").value;
+    
+    if(x != '' && y != '' && smell != ''){
+      document.getElementById("scatterChart").innerHTML = '';
+      plot(x, y, smell);
+    }
+  }
+
+  //plot("fanout", "lcom*")
+</script>
+
+</body>
+</html>
