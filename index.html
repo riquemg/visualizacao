@@ -8,6 +8,13 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <script src="scatterplot.js"></script>
+  <script src="histogram.js"></script>
+  <style>
+    div {
+      padding-top: 5px;
+      padding-bottom: 5px;
+    }
+  </style>
 </head>
 <body>
 
@@ -16,64 +23,90 @@
   <p>Henrique Gomes Nunes - henrique.mg.bh@gmail.com</p> 
 </div>
   
-<div class="container mt-5">
+<div class="container">
   <div class="row">
-    <div class="col-sm-4">
-      
-      <h3>Filters:</h3>
-
-      <div class="col-sm-6">
-        <p>Axis x:</p>
-        <select id="axisX" name="axisX" class="form-select" multiple aria-label="multiple select example" onclick="graphic();">
-          <option value="dit">dit</option>
-          <option value="fanin">fanin</option>
-          <option value="fanout">fanout</option>
-          <option value="lcc">lcc</option>
-          <option value="lcom*">lcom*</option>
-          <option value="loc">loc</option>
-          <option value="noc">noc</option>
-          <option value="rfc">rfc</option>
-          <option value="icq">icq</option>
-          <option value="nof">nof</option>
-          <option value="nom">nom</option>
-          <option value="wmc">wmc</option>
-        </select>
+    <div class="col-sm-12">
+      <div class="row">
+        <div class="col-sm-12">
+          <h3>Filters</h3>
+        </div>
       </div>
-
-      <br>
-
-      <p>Axis y:</p>
-      <div class="col-sm-6">
-        <select id="axisY" name="axisY" class="form-select" multiple aria-label="multiple select example" onclick="graphic();">
-          <option value="dit">dit</option>
-          <option value="fanin">fanin</option>
-          <option value="fanout">fanout</option>
-          <option value="lcc">lcc</option>
-          <option value="lcom*">lcom*</option>
-          <option value="loc">loc</option>
-          <option value="noc">noc</option>
-          <option value="rfc">rfc</option>
-          <option value="icq">icq</option>
-          <option value="nof">nof</option>
-          <option value="nom">nom</option>
-          <option value="wmc">wmc</option>
-        </select>
-      </div>
-
-      <br>
-
-      <p>Code smell:</p>
-      <div class="col-sm-6">
-        <select id="smell" name="smell" class="form-select" multiple aria-label="multiple select example" onclick="graphic();">
-          <option value="gc">God Class</option>
-          <option value="rb">Refused Bequest</option>
-        </select>
-      </div>
-
     </div>
-    <div class="col-sm-8">
-      <h3>Metrics distribution:</h3>
-      <svg id="scatterChart"></svg>
+    <div class="col-sm-12">
+      <div class="row">
+        <div class="col-sm-4">
+          <p>Axis x:</p>
+          <select id="axisX" name="axisX" class="form-select" multiple aria-label="multiple select example" onclick="graphic();">
+            <option value="dit">dit</option>
+            <option value="fanin">fanin</option>
+            <option value="fanout">fanout</option>
+            <option value="lcc">lcc</option>
+            <option value="lcom*">lcom*</option>
+            <option value="loc">loc</option>
+            <option value="noc">noc</option>
+            <option value="rfc">rfc</option>
+            <option value="icq">icq</option>
+            <option value="nof">nof</option>
+            <option value="nom">nom</option>
+            <option value="wmc">wmc</option>
+          </select>
+        </div>
+        <div class="col-sm-4">
+          <p>Axis y:</p>
+          <select id="axisY" name="axisY" class="form-select" multiple aria-label="multiple select example" onclick="graphic();">
+            <option value="dit">dit</option>
+            <option value="fanin">fanin</option>
+            <option value="fanout">fanout</option>
+            <option value="lcc">lcc</option>
+            <option value="lcom*">lcom*</option>
+            <option value="loc">loc</option>
+            <option value="noc">noc</option>
+            <option value="rfc">rfc</option>
+            <option value="icq">icq</option>
+            <option value="nof">nof</option>
+            <option value="nom">nom</option>
+            <option value="wmc">wmc</option>
+          </select>
+        </div>
+        <div class="col-sm-4">
+          <p>Code smell:</p>
+          <select id="smell" name="smell" class="form-select" multiple aria-label="multiple select example" onclick="graphic();">
+            <option value="gc">God Class</option>
+            <option value="rb">Refused Bequest</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="row">
+        <div class="col-sm-12">
+          <h3>Metrics distribution</h3>
+          <svg id="scatterChart"></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="row">
+        <div class="col-sm-12">
+          <h3>Histogram</h3>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6 text-center">
+          <span id="title_x"></span>
+          <div id="histogram_x"></div>
+        </div>
+        <div class="col-sm-6 text-center">
+          <span id="title_y"></span>
+          <div id="histogram_y"></div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -85,14 +118,25 @@
     x = document.getElementById("axisX").value;
     y = document.getElementById("axisY").value;
     smell = document.getElementById("smell").value;
+
+    titleX = document.getElementById("title_x");
+    titleY = document.getElementById("title_y");
     
     if(x != '' && y != '' && smell != ''){
+      titleX.innerHTML = x;
+      titleY.innerHTML = y;
+
       document.getElementById("scatterChart").innerHTML = '';
-      plot(x, y, smell);
+      document.getElementById("histogram_x").innerHTML = '';
+      document.getElementById("histogram_y").innerHTML = '';
+
+      scatterplot(x, y, smell);
+
+      histogram(x,"histogram_x");
+      histogram(y,"histogram_y");
     }
   }
 
-  //plot("fanout", "lcom*")
 </script>
 
 </body>
