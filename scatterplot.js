@@ -1,23 +1,19 @@
-﻿// Carrega os dados do arquivo CSV usando D3.js
 function scatterplot(x, y, s){
   d3.csv('classes_metrics.csv').then(data => {
     const axis_x = data.map(d => parseFloat(d[x]));
     const axis_y = data.map(d => parseFloat(d[y]));
     const godClassData = data.map(d => parseInt(d[s]));
 
-    // Prepara os dados para o gráfico
     const chartData = axis_y.map((_, index) => ({
       x: axis_x[index],
       y: axis_y[index],
       godClass: godClassData[index]
     }));
 
-    // Configuração do tamanho do gráfico
     const width = 800;
     const height = 400;
     const padding = 40;
 
-    // Cria o elemento SVG
     const svg = d3.select('#scatterChart')
       .attr('width', width)
       .attr('height', height)
@@ -27,7 +23,6 @@ function scatterplot(x, y, s){
 
     const chartArea = svg.append('g');
 
-    // Cria as escalas para os eixos x e y
     const xScale = d3.scaleLinear()
       .domain([d3.min(axis_x), d3.max(axis_x)])
       .range([padding, width - padding]);
@@ -36,7 +31,6 @@ function scatterplot(x, y, s){
       .domain([d3.min(axis_y), d3.max(axis_y)])
       .range([height - padding, padding]);
 
-    // Cria os pontos do gráfico
     chartArea.selectAll('circle')
       .data(chartData)
       .enter()
@@ -47,7 +41,6 @@ function scatterplot(x, y, s){
       .attr('fill', 'none')
       .attr('stroke', d => (d.godClass === 0) ? '#1985FF' : '#F59D00');
 
-    // Cria os eixos x e y
     chartArea.append('g')
       .attr('transform', `translate(0, ${height - padding})`)
       .call(d3.axisBottom(xScale));
